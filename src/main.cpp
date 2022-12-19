@@ -15,20 +15,6 @@ BLEIntCharacteristic bleCharacteristic = BLEIntCharacteristic("c1534b39-34b4-4bc
 
 BLEDescriptor bleDescriptor = BLEDescriptor("8ee70684-3017-4f4f-aa42-3ad0370c816f", "652223");
 
-//connect event handler
-/*void blePeripheralConnectHandler(BLECentral& central) {
-  Serial.print(F("Connected with central: "));
-  Serial.println(central.address());
-}*/
-
-
-//disconnect event handler
-/*void blePeripheralDisconnectHandler(BLECentral& central) {
-  Serial.print(F("Disconnected from central: "));
-  Serial.println(central.address());
-}*/
-
-
 //send data medicines
 void dataSender(int codebar_medicine){
   //update value sent to central
@@ -49,25 +35,18 @@ void setup() {
 #endif
 
 
-  // set advertised local name and service UUID
-  
+  // set service UUID
   blePeripheral.setAdvertisedServiceUuid(Service.uuid());
+  
   // add service, characteristic and descriptor
   blePeripheral.addAttribute(Service);
   blePeripheral.addAttribute(bleCharacteristic);
   blePeripheral.addAttribute(bleDescriptor);
+  
+  //set name to the device
   blePeripheral.setLocalName("CodeBar Reader");
 
-  //connect and disconnect event handlers
-  //blePeripheral.setEventHandler(BLEConnected, blePeripheralConnectHandler);
-  //blePeripheral.setEventHandler(BLEDisconnected, blePeripheralDisconnectHandler);  
-
-  // begin initialization
-
-  //bleCharacteristic.setValue(1234);
-  //Serial.print(F("Medicine "));
-  //Serial.println(1234);
-  dataSender(727085);
+  dataSender(727085); //send the code 727085 to the edge
 
   blePeripheral.begin();
 }
@@ -77,8 +56,7 @@ void loop() {
   BLECentral central = blePeripheral.central();
 
   if (central) {
-    //int i;
-
+    
     Serial.print(F("Connected to central: "));
     Serial.println(central.address());
 
